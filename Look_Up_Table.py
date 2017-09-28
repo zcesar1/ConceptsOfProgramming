@@ -4,7 +4,7 @@ dict = {'specifications': 0, 'symbol': 1, 'forward': 2, 'references': 3, 'functi
         'constant': 16, 'begin': 17, 'endfun': 18,  'if': 19, 'then': 20,
         'else': 21, 'endif': 22, 'repeat': 23, 'until': 24, 'endrepeat': 25,
         'display': 26, 'set': 27, 'return': 28, 'integer identifier': 29,
-        'float identifier': 30, 'string identifier': 31, 'boolean identifier': 32, 'string literal': 33}
+        'float identifier': 30, 'string identifier': 31, 'boolean identifier': 32, 'string literal': 33, 'constant': 34}
 
 
 
