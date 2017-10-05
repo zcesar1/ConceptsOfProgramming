@@ -19,12 +19,25 @@ def lex():  # lexer
     global current_token
     global file_line
     file_line = next_line()
-    if get_next_char() == '':  # skip an empty line
-        next_line()
-        current_line += 1
-        row += 1
-    elif get_next_char() == "/":  # checks for comments
-        comments()
+    while(col < len(file_line)):
+        if file_line == '':  # skip an empty line
+            next_line()
+            current_line += 1
+            row += 1
+        elif file_line[col] == "/":  # checks for comments
+            comments()
+        elif file_line[col].isalpha(): # check for the current char being a character; isalpha() does NOT work!
+            if get_next_char().isaplha():
+                for file_line[col] in file_line:
+                    if get_next_char() != '':
+                        current_token.append()
+                    else:
+                        return
+            else:
+                return
+        else:
+            return
+    print(current_token)
 def next_line():  # gets the next line in the file
     global current_line
     if current_line == 0:
@@ -34,6 +47,7 @@ def next_line():  # gets the next line in the file
     global file_line
     file_line = file.readline()
     return file_line
+
 def get_next_char():  # gets the next token
     global col
     global file_line
