@@ -18,26 +18,24 @@ def lex():  # lexer
     global current_line
     global current_token
     global file_line
-    file_line = next_line()
-    while(col < len(file_line)):
-        if file_line == '':  # skip an empty line
-            next_line()
-            current_line += 1
-            row += 1
-        elif file_line[col] == "/":  # checks for comments
-            comments()
-        elif re.search(r'[a-zA-Z]', file_line[col]):  # check for the current char being a character
-            if re.search(r'[a-zA-Z]', get_next_char()):
-                for file_line[col] in file_line:
-                    col += 1
-                    if get_next_char() != '':
-                        current_token.append()
-                    else:
-                        return
-            else:
-                return
+    if file_line == "":  # skip an empty line
+        next_line()
+        current_line += 1
+        row += 1
+    elif file_line[col] == "/":  # checks for comments
+        comments()
+    elif re.search(r'[a-zA-Z]', file_line[col]):  # check for the current char being a character
+        if re.search(r'[a-zA-Z]', get_next_char()):
+            while col < len(file_line):
+                col += 1
+                if get_next_char() != '':
+                    current_token.append(file_line[col])
+                else:
+                    return
         else:
             return
+    else:
+        return
     print(current_token)
 def next_line():  # gets the next line in the file
     global current_line
@@ -71,4 +69,11 @@ def comments(): # interprets whether or not there is a comment, so that it can b
     else:
         return
 
-lex()
+print(next_line())
+print(file_line)
+if re.search(r'[a-zA-z]', file_line):
+    if re.search(r'[a-zA-z]', get_next_char()):
+        re.search(r'[\s]', file_line)
+        print(file_line)
+        # no_spaces = re.sub(r'\s', '', file_line) delete spaces
+        #print (no_spaces)
