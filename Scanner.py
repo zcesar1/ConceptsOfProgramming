@@ -1,5 +1,5 @@
-import Look_Up_Table;
-
+import Look_Up_Table
+import re
 # global variables
 
 file = open("sclex1.scl", 'r')  # opens the file and stores it in a file object that can be manipulated later
@@ -26,9 +26,10 @@ def lex():  # lexer
             row += 1
         elif file_line[col] == "/":  # checks for comments
             comments()
-        elif file_line[col].isalpha(): # check for the current char being a character; isalpha() does NOT work!
-            if get_next_char().isaplha():
+        elif re.search(r'[a-zA-Z]', file_line[col]):  # check for the current char being a character
+            if re.search(r'[a-zA-Z]', get_next_char()):
                 for file_line[col] in file_line:
+                    col += 1
                     if get_next_char() != '':
                         current_token.append()
                     else:
