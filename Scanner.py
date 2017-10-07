@@ -19,7 +19,7 @@ def lex():  # lexer
         with open('sclex1.scl', 'r') as file_line:
             for index in file_line: # index gives the char, while col gives the # that the index is at
                 if index == "":  # skip an empty line
-                    next_line()
+                    # next_line()
                     current_line += 1
                     row += 1
                 elif index == "/":  # checks for comments
