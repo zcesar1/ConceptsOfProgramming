@@ -1,3 +1,6 @@
+# Concepts of Programming Languages Project 1 Deliverable
+# Zoe Cesar, Kelli Yeatman, Vlad Perevalov
+
 import Look_Up_Table
 import re
 
