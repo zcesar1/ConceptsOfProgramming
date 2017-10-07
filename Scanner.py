@@ -36,7 +36,10 @@ def lex():  # lexer
                         current_string = file_line[index]
                         Token.extend(["Current lexeme", current_string, "Token", Look_Up_Table.Keywords.get(current_string)
                                              , "Value", Look_Up_Table.Keywords[current_string]])
-                        return
+                elif re.search(r'[0-9]', index): # if it's a digit
+                    if re.search(r'[0-9]', get_next_char()):
+
+
                 else:
                     return
 
