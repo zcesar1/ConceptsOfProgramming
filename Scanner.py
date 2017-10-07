@@ -4,7 +4,7 @@ import collections
 # global variables
 
 file = open("sclex1.scl", 'r')  # opens the file and stores it in a file object that can be manipulated later
-Token = collections.namedtuple('Token', ['typ', 'value', 'line', 'column'])  # list, it will store the token number and lexeme
+Token = collections.namedtuple('Token', ['type', 'tok_type', 'value', 'line'])  # list, it will store the token number and lexeme
 file_line = file.read()  # store the current file string being read
 col = 0  # current index in the file as it is being read
 row = 0  # current row in the file as it is being read
@@ -35,19 +35,20 @@ def lex(s):  # lexer
     pos = line_start = 0
     mo = get_token(s)
     while mo is not None:
-        typ = mo.lastgroup
-        if typ == 'NEWLINE':
+        type = mo.lastgroup
+        if type == 'NEWLINE':
             line_start = pos
             line += 1
-        elif typ != 'SKIP':
-            val = mo.group(typ)
-            if typ == 'ID' and val in Look_Up_Table.Keywords:
-                typ = val
-            yield Token(typ, val, line, mo.start() - line_start)
+        elif type != 'SKIP':
+            tok_type = mo.group(type)
+            if type == 'ID' and tok_type in Look_Up_Table.Keywords:
+                value = type
+                tok_type = Look_Up_Table.Keywords.get(value)
+            yield Token(type, tok_type, line, mo.start() - line_start)
         pos = mo.end()
         mo = get_token(s, pos)
-    if pos != len(s):
-        raise RuntimeError('Unexpected character %r on line %d' % (s[pos], line))
+    '''if pos != len(s):
+        raise RuntimeError('Unexpected character %r on line %d' % (s[pos], line))'''
 
     '''space_index = 0  # stores the index that the space is found (in this case the spaces are '#')
     if file_line == "":  # skip an empty line
