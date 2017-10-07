@@ -8,6 +8,7 @@ class Lexer:
     current_string = ""  # store the current string being read
     Token = []
     file_line = ""
+    dict_value = "" # be the key for the dict values that are operators
 def lex():  # lexer
 
         global col
@@ -42,7 +43,26 @@ def lex():  # lexer
 
                 else:
                     return
-
+def lookup(current_string): # find the corresponding dict values for non-keywords and operators
+    global dict_value
+    if current_string == '+':
+        dict_value = "add_operator"
+        return dict_value
+    if current_string == '-':
+        dict_value = "sub_operator"
+        return dict_value
+    if current_string == '*':
+        dict_value = "mul_operator"
+        return dict_value
+    if current_string == '/':
+    if current_string == '(':
+    if current_string == ')':
+    if current_string == '<=':
+    if current_string == '<':
+    if current_string == '>=':
+    if current_string == '>':
+    if current_string == '=':
+    if current_string == '!=':
 def next_line():  # gets the next line in the file
         global file
         global  current_line
