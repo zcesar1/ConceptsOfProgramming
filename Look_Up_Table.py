@@ -10,5 +10,5 @@ Non_Keywords = {'integer identifier': 29, 'float identifier': 30, 'string identi
 # string literals are things enclosed in quotes
 # int identifier: for example int money, money is the int identifier
 Operators = {'add_operator': 35, 'sub_operator': 36, 'mul_operator': 37, 'div_operator': 38, 'left_paren': 39,
-             'right_paren': 40, 'le_operator' : 41, 'lt_operator': 42, 'ge_operator': 43,
+             'right_paren': 40, 'le_operator': 41, 'lt_operator': 42, 'ge_operator': 43,
             'gt_operator': 44, 'eq_operator': 45, 'ne_operator': 46}
