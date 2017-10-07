@@ -3,17 +3,22 @@ import re
 import collections
 
 class Lexer:
+    col = 0  # current index in the file as it is being read
+    row = 0  # current row in the file as it is being read
+    current_line = 0  # current line in the file as it's being read
+    current_string = ""  # store the current string being read
+    Token = []
 
-   ''' file = open("sclex1.scl", 'r')  # opens the file and stores it in a file object that can be manipulated later
+''' file = open("sclex1.scl", 'r')  # opens the file and stores it in a file object that can be manipulated later
     Token = collections.namedtuple('Token', ['type', 'tok_type', 'value', 'line'])  # list, it will store the token number and lexeme
     file_line = file.readlines()  # store the current file string being read '''
 
-def lex(self, file):  # lexer
+def lex(file):  # lexer
 
-        col = 0  # current index in the file as it is being read
-        row = 0  # current row in the file as it is being read
-        current_line = 0  # current line in the file as it's being read
-        current_string = ""  # store the current string being read
+        global col
+        global row
+        global current_line
+        global current_string
 
         space_index = 0  # stores the index that the space is found (in this case the spaces are '#')
         if file_line == "":  # skip an empty line
@@ -23,13 +28,14 @@ def lex(self, file):  # lexer
         elif file_line[col] == "/":  # checks for comments
             comments()
         elif re.search(r'[a-zA-Z]', file_line[col]):  # check for the current char being a character
-            if re.search(r'[a-zA-Z]', get_next_char()):
+            if re.search(r'[a-zA-Z]', get_next_char()): # check next char for a letter
                 no_spaces = re.sub(r'\s', '#', file_line)  # delete spaces
                 space_index = no_spaces.find('#')
                 for i in range(0, space_index):
                     current_string = file_line[i]
-            if(Look_Up_Table.Keywords.has_key(current_string)):
-                Token.append(["Current lexeme", current_string, "Token", Look_Up_Table.Keywords.get(current_string), "Value",
+            if Look_Up_Table.Keywords.has_key(current_string):
+                global Token
+                Token.extend(["Current lexeme", current_string, "Token", Look_Up_Table.Keywords.get(current_string), "Value",
                               Look_Up_Table.Keywords[current_string]])
             else:
                 return
@@ -67,16 +73,3 @@ def comments(): # interprets whether or not there is a comment, so that it can b
                 return next_line()
         else:
             return
-
-    next_line()
-    print(get_next_char())
-    if re.search(r'[a-zA-Z]', file_line[col]):  # check for the current char being a character
-            if re.search(r'[a-zA-Z]', get_next_char()):
-                no_spaces = re.sub(r'\s', '#', file_line)  # delete spaces
-                space_index = no_spaces.find('#')
-                for i in range(0, space_index):
-                    current_string = file_line[i]
-            if(Look_Up_Table.Keywords.has_key(current_string)):
-                Token.append(["Current lexeme", current_string, "Token", Look_Up_Table.Keywords.get(current_string), "Value",
-                              Look_Up_Table.Keywords[current_string]])
-    
