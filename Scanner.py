@@ -26,15 +26,16 @@ def lex():  # lexer
                     comments()
                 elif re.search(r'[a-zA-Z]', index):  # check for the current char being a character
                     if re.search(r'[a-zA-Z]', get_next_char()): # check next char for a letter
-                        no_spaces = re.sub(r'\s', '#', file_line)  # delete spaces
-                        space_index = no_spaces.find('#')
-                        for i in range(0, space_index):
-                            current_string = file_line[i]
-                    if Look_Up_Table.Keywords.has_key(current_string):
-                        global Token
-                        Token.extend(["Current lexeme", current_string, "Token", Look_Up_Table.Keywords.get(current_string), "Value",
-                                      Look_Up_Table.Keywords[current_string]])
-                    else:
+                        while index != '':
+                            current_string = file_line[index]
+                        if current_string in Look_Up_Table.Keywords:
+                            global Token
+                            Token.extend(["Current lexeme", current_string, "Token", Look_Up_Table.Keywords.get(current_string)
+                                             , "Value", Look_Up_Table.Keywords[current_string]])
+                    elif get_next_char() == '':
+                        current_string = file_line[index]
+                        Token.extend(["Current lexeme", current_string, "Token", Look_Up_Table.Keywords.get(current_string)
+                                             , "Value", Look_Up_Table.Keywords[current_string]])
                         return
                 else:
                     return
@@ -67,3 +68,8 @@ def comments(): # interprets whether or not there is a comment, so that it can b
                 return next_line()
         else:
             return
+
+'''no_spaces = re.sub(r'\s', '#', file_line)  # delete spaces
+                        space_index = no_spaces.find('#')
+                        for i in range(0, space_index):
+                            current_string = file_line[i]'''
