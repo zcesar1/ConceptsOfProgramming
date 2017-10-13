@@ -3,7 +3,8 @@
 
 import Scanner
 
-print("this is the test of the lexer: ")
+lex = Scanner.Lexer()
+print(lex.Token)
+#for i in lex.Token:
+ #   print(i)
 
-Scanner.lex()
-print (Scanner.Token)

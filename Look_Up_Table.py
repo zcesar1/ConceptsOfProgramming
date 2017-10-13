@@ -8,7 +8,7 @@ Keywords = {'specifications': 0, 'symbol': 1, 'forward': 2, 'references': 3, 'fu
         'else': 21, 'endif': 22, 'repeat': 23, 'until': 24, 'endrepeat': 25,
         'display': 26, 'set': 27, 'return': 28, 'while': 47, 'endwhile': 48}
 
-Non_Keywords = {'integer identifier': 29, 'float identifier': 30, 'string identifier': 31,
+Non_Keywords = {'ID': 47, 'integer identifier': 29, 'float identifier': 30, 'string identifier': 31,
                 'boolean identifier': 32, 'string literal': 33, 'constant': 34}
 # string literals are things enclosed in quotes
 # int identifier: for example int money, money is the int identifier

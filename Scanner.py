@@ -7,128 +7,137 @@ import re
 class Lexer:
     col = 0  # current index in the file as it is being read
     row = 0  # current row in the file as it is being read
-    current_line = 0  # current line in the file as it's being read
     current_string = ""  # store the current string being read
-    Token = []
-    file_line = ""
+    Token = ['List of Tokens']
+    file = open('sclex1.scl', 'r')
+    file_line = file
     dict_value = "" # be the key for the dict values that are operators
-def lex():  # lexer
 
-        #global col
-        #global row
-        #global current_line
-        #global current_string
-        #global file_line
+    def lex(self):  # lexer
+            col = Lexer.col
+            row = Lexer.row
+            current_string = Lexer.current_string
+            file_line = Lexer.file_line
+            Token = Lexer.Token
+            token1 = []
+            token2 = []
+            token3 = []
+            token4 = []
+            token5 = []
+            token6 = []
+            # for index in file_line: # index gives line of the file
+            for character in file_line: # gives each character on the line
+                if file_line == "":
+                    self.next_line()
+                elif character == "/":  # checks for comments
+                    self.comments(file_line, col)
+                elif re.search(r'[a-zA-Z]', character):  # check for the current char being a character
+                    if re.search(r'[a-zA-Z]', self.get_next_char(file_line, col)):  # check next char for a letter
+                        while character != '':
+                            col += 1
+                            current_string += character
+                            if current_string in Look_Up_Table.Keywords:
+                                token1.extend(["Current lexeme", current_string, "Token", Look_Up_Table.Keywords.get(current_string)
+                                                     , "Value", Look_Up_Table.Keywords[current_string]])
+                            elif current_string == 'import':
+                                token2.extend(["Current lexeme", current_string, "Token", Look_Up_Table.Keywords.get('specifications')
+                                                         , "Value", Look_Up_Table.Keywords['specifications']])
+                            elif current_string.isupper():
+                                token3.extend(["Current lexeme", current_string, "Token", Look_Up_Table.Non_Keywords.get('constant')
+                                                     , "Value", Look_Up_Table.Keywords['constant']])
+                            elif self.get_next_char(file_line, col) == '':
+                                 col += 1
+                                 current_string = character
+                                 token4.extend(["Current lexeme", current_string, "Token", Look_Up_Table.Non_Keywords.get('ID')
+                                                         , "Value", Look_Up_Table.Keywords['ID']])
+                            elif re.search(r'[0-9]', character): # if it's a digit
+                                    while file_line != '':
+                                        col += 1
+                                        current_string = file_line[file_line]
+                                    token5.extend(["Current lexeme", current_string, "Token", "int-literal"
+                                                         , "Value", Look_Up_Table.Keywords['integer identifier']])
+                            elif re.search(r'[+/*-]', character):
+                                col += 1
+                                current_string = file_line[file_line]
+                                dict_value = self.lookup(current_string)
+                                token6.extend(["Current lexeme", current_string, "Token", Look_Up_Table.Operators.get(dict_value)
+                                                         , "Value", Look_Up_Table.Keywords[dict_value]])
+                            elif character == "":
+                                self.next_line()
+            Token.extend(token1)
+            Token.extend(token2)
+            Token.extend(token3)
+            Token.extend(token4)
+            Token.extend(token5)
+            Token.extend(token6)
+            return Token
 
-        col = Lexer.col
-        row = Lexer.row
-        current_string = Lexer.current_string
-        current_line = Lexer.current_line
-        file_line = Lexer.file_line
-        with open('sclex1.scl', 'r') as file_line:
-            for index in file_line: # index gives the char, while col gives the # that the index is at
-                #if index == "":  # skip an empty line
-                    # next_line()
-                #    current_line += 1
-                 #   row += 1
-                if index == "/":  # checks for comments
-                    comments()
-                elif re.search(r'[a-zA-Z]', index):  # check for the current char being a character
-                    if re.search(r'[a-zA-Z]', get_next_char()):  # check next char for a letter
-                        while index != '':
-                            current_string = file_line[index]
-                        if current_string in Look_Up_Table.Keywords:
-                            Token = Lexer.Token
-                            Token.extend(["Current lexeme", current_string, "Token", Look_Up_Table.Keywords.get(current_string)
-                                             , "Value", Look_Up_Table.Keywords[current_string]])
-                    elif get_next_char() == '':
-                        current_string = file_line[index]
-                        Token.extend(["Current lexeme", current_string, "Token", Look_Up_Table.Keywords.get(current_string)
-                                             , "Value", Look_Up_Table.Keywords[current_string]])
-                elif re.search(r'[0-9]', index): # if it's a digit
-                        while index != '':
-                            current_string = file_line[index]
-                        Token.extend(["Current lexeme", current_string, "Token", "int-literal"
-                                             , "Value", Look_Up_Table.Keywords['integer identifier']])
-                elif re.search(r'[+/*-]', index):
-                    current_string = file_line[index]
-                    dict_value = lookup(current_string)
-                    Token.extend(["Current lexeme", current_string, "Token", Look_Up_Table.Operators.get(dict_value)
-                                             , "Value", Look_Up_Table.Keywords[dict_value]])
+    def lookup(self, current_string): # find the corresponding dict values for non-keywords and operators
+        dict_value = Lexer.dict_value
+        if current_string == '+':
+            dict_value = "add_operator"
+            return dict_value
+        if current_string == '-':
+            dict_value = "sub_operator"
+            return dict_value
+        if current_string == '*':
+            dict_value = "mul_operator"
+            return dict_value
+        if current_string == '/':
+            dict_value = "div_operator"
+            return dict_value
+        if current_string == '(':
+            dict_value = "left_paren"
+            return dict_value
+        if current_string == ')':
+            dict_value = "right_paren"
+            return dict_value
+        if current_string == '<=':
+            dict_value = "le_operator"
+            return dict_value
+        if current_string == '<':
+            dict_value = "lt_operator"
+            return dict_value
+        if current_string == '>=':
+            dict_value = "ge_operator"
+            return dict_value
+        if current_string == '>':
+            dict_value = "gt_operator"
+            return dict_value
+        if current_string == '=':
+            dict_value = "eq_operator"
+            return dict_value
+        if current_string == '!=':
+            dict_value = "ne_operator"
+            return dict_value
+        if re.search('r'["/w"], current_string):
+            dict_value = "string literal"
+            return dict_value
+
+    def next_line(self):  # gets the next line in the file
+            file_line = Lexer.file_line
+            row = Lexer.row
+            file_line.readline()
+            row += 1
+            return file_line
+
+    def get_next_char(self, file_line, col):
+        for character in file_line:
+            character[col + 1]
+
+        return character
+
+    def comments(self, file_line, col): # interprets whether or not there is a comment, so that it can be ignored
+            row = Lexer.row
+            for character in file_line:
+                if character[col] == "/":
+                    if self.get_next_char(file_line, col) == "*":
+                        for char in file_line:
+                            if char == "*" and self.get_next_char(file_line, col) == "/":
+                                row += 1
+                                return self.next_line()
+                    elif self.get_next_char(file_line, col) == "/":
+                        row += 1
+                        return self.next_line()
                 else:
                     return
-            return Token
-def lookup(current_string): # find the corresponding dict values for non-keywords and operators
-   # global dict_value
-    dict_value = Lexer.dict_value
-    if current_string == '+':
-        dict_value = "add_operator"
-        return dict_value
-    if current_string == '-':
-        dict_value = "sub_operator"
-        return dict_value
-    if current_string == '*':
-        dict_value = "mul_operator"
-        return dict_value
-    if current_string == '/':
-        dict_value = "div_operator"
-        return dict_value
-    if current_string == '(':
-        dict_value = "left_paren"
-        return dict_value
-    if current_string == ')':
-        dict_value = "right_paren"
-        return dict_value
-    if current_string == '<=':
-        dict_value = "le_operator"
-        return dict_value
-    if current_string == '<':
-        dict_value = "lt_operator"
-        return dict_value
-    if current_string == '>=':
-        dict_value = "ge_operator"
-        return dict_value
-    if current_string == '>':
-        dict_value = "gt_operator"
-        return dict_value
-    if current_string == '=':
-        dict_value = "eq_operator"
-        return dict_value
-    if current_string == '!=':
-        dict_value = "ne_operator"
-        return dict_value
-def next_line():  # gets the next line in the file
-        #global file_line
-        #global current_line
-        file_line = Lexer.file_line
-        current_line = Lexer.current_line
-        file_line.readline()
-        current_line += 1
-        return file_line
-
-def get_next_char():  # gets the next token
-        #global col
-        #global file_line
-        col = Lexer.col
-        file_line = Lexer.file_line
-        col += 1
-        return file_line[col]
-
-def comments(): # interprets whether or not there is a comment, so that it can be ignored
-       # global file_line
-       # global row
-       # global col
-        col = Lexer.col
-        file_line = Lexer.file_line
-        row = Lexer.row
-        if file[col] == "/":
-            if get_next_char() == "*":
-                for char in file_line:
-                    if char == "*" and get_next_char() == "/":
-                        row += 1
-                        return next_line()
-            elif get_next_char() == "/":
-                row += 1
-                return next_line()
-        else:
-            return
