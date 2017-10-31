@@ -29,17 +29,21 @@ class Lexer:
             # for index in file_line: # index gives line of the file
             for line in file_line:  # prints the file line (ends with \n)
                 for letter in line:
-                    if line == "/":  # checks for comments
+                    if letter == "/":  # checks for comments
                         self.comments(file_line, col)
 
                     #   re.search(r'[a-zA-Z]', letter)
                     #  re.search(r'[a-zA-Z]', self.get_next_char(line, col))
-                    elif self.get_next_char(line, col).isalpha():  # check for the current char being a letter letter.isalpha()
+                    elif letter.isalpha():  # check for the current char being a letter letter.isalpha()
                        # if : # check if the next char is a letter
-                        col += 1
+                        #col += 1
                         current_string += letter
+                        col += 1
 
-                    if current_string in Look_Up_Table.Keywords:
+                    # elif not letter.isalpha():
+                    #     break
+
+                    elif current_string in Look_Up_Table.Keywords:
                         token1.extend(["Current lexeme", current_string, "Token",
                                            Look_Up_Table.Keywords.get(current_string)
                                                   , "Value", Look_Up_Table.Keywords[current_string]])
@@ -58,7 +62,7 @@ class Lexer:
                         col += 1
 
                     elif letter == '"':
-                        if letter.isalpha():
+                        if self.get_next_char(line, col).isalpha():
                             print col
                             col += 1
                             string += letter
