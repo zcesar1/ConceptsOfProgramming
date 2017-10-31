@@ -25,53 +25,78 @@ class Lexer:
             token4 = []
             token5 = []
             token6 = []
+            string = ""
             # for index in file_line: # index gives line of the file
-            for character in file_line: # gives each character on the line
-                if file_line == "":
-                    self.next_line()
-                elif character == "/":  # checks for comments
-                    self.comments(file_line, col)
-                elif re.search(r'[a-zA-Z]', character):  # check for the current char being a character
-                    if re.search(r'[a-zA-Z]', self.get_next_char(file_line, col)):  # check next char for a letter
-                        while character != '':
-                            col += 1
-                            current_string += character
-                            if current_string in Look_Up_Table.Keywords:
-                                token1.extend(["Current lexeme", current_string, "Token", Look_Up_Table.Keywords.get(current_string)
-                                                     , "Value", Look_Up_Table.Keywords[current_string]])
-                            elif current_string == 'import':
-                                token2.extend(["Current lexeme", current_string, "Token", Look_Up_Table.Keywords.get('specifications')
-                                                         , "Value", Look_Up_Table.Keywords['specifications']])
-                            elif current_string.isupper():
-                                token3.extend(["Current lexeme", current_string, "Token", Look_Up_Table.Non_Keywords.get('constant')
-                                                     , "Value", Look_Up_Table.Keywords['constant']])
-                            elif self.get_next_char(file_line, col) == '':
-                                 col += 1
-                                 current_string = character
-                                 token4.extend(["Current lexeme", current_string, "Token", Look_Up_Table.Non_Keywords.get('ID')
-                                                         , "Value", Look_Up_Table.Keywords['ID']])
-                            elif re.search(r'[0-9]', character): # if it's a digit
-                                    while file_line != '':
-                                        col += 1
-                                        current_string = file_line[file_line]
-                                    token5.extend(["Current lexeme", current_string, "Token", "int-literal"
-                                                         , "Value", Look_Up_Table.Keywords['integer identifier']])
-                            elif re.search(r'[+/*-]', character):
-                                col += 1
-                                current_string = file_line[file_line]
-                                dict_value = self.lookup(current_string)
-                                token6.extend(["Current lexeme", current_string, "Token", Look_Up_Table.Operators.get(dict_value)
-                                                         , "Value", Look_Up_Table.Keywords[dict_value]])
-                            elif character == "":
-                                self.next_line()
-            Token.extend(token1)
-            Token.extend(token2)
-            Token.extend(token3)
-            Token.extend(token4)
-            Token.extend(token5)
-            Token.extend(token6)
-            return Token
+            for line in file_line:  # prints the file line (ends with \n)
+                for letter in line:
+                    if line == "/":  # checks for comments
+                        self.comments(file_line, col)
 
+                    #   re.search(r'[a-zA-Z]', letter)
+                    #  re.search(r'[a-zA-Z]', self.get_next_char(line, col))
+                    elif self.get_next_char(line, col).isalpha():  # check for the current char being a letter letter.isalpha()
+                       # if : # check if the next char is a letter
+                        col += 1
+                        current_string += letter
+
+                    if current_string in Look_Up_Table.Keywords:
+                        token1.extend(["Current lexeme", current_string, "Token",
+                                           Look_Up_Table.Keywords.get(current_string)
+                                                  , "Value", Look_Up_Table.Keywords[current_string]])
+                        col += 1
+
+                    elif current_string == 'import':
+                        token2.extend(["Current lexeme", current_string, "Token",
+                                                   Look_Up_Table.Keywords.get('specifications')
+                                                  , "Value", Look_Up_Table.Keywords['specifications']])
+                        col += 1
+
+                    elif current_string.isupper():
+                        token3.extend(["Current lexeme", current_string, "Token",
+                                           Look_Up_Table.Non_Keywords.get('constant')
+                                                  , "Value", Look_Up_Table.Keywords['constant']])
+                        col += 1
+
+                    elif letter == '"':
+                        if letter.isalpha():
+                            print col
+                            col += 1
+                            string += letter
+                        else:
+                            string += letter
+                            col += 1
+                return current_string
+
+
+    ''' 
+
+elif self.get_next_char(file_line, col) == '':
+     col += 1
+     current_string = line
+     token4.extend(["Current lexeme", current_string, "Token", Look_Up_Table.Non_Keywords.get('ID')
+                             , "Value", Look_Up_Table.Keywords['ID']])
+elif re.search(r'[0-9]', line): # if it's a digit
+        while file_line != '':
+            col += 1
+            current_string = file_line[file_line]
+        token5.extend(["Current lexeme", current_string, "Token", "int-literal"
+                             , "Value", Look_Up_Table.Keywords['integer identifier']])
+elif re.search(r'[+/*-]', line):
+    col += 1
+    current_string = file_line[file_line]
+    dict_value = self.lookup(current_string)
+    token6.extend(["Current lexeme", current_string, "Token", Look_Up_Table.Operators.get(dict_value)
+                             , "Value", Look_Up_Table.Keywords[dict_value]])
+elif line == "":
+    self.next_line()
+Token.extend(token1)
+Token.extend(token2)
+Token.extend(token3)
+Token.extend(token4)
+Token.extend(token5)
+Token.extend(token6)
+return Token
+'''
     def lookup(self, current_string): # find the corresponding dict values for non-keywords and operators
         dict_value = Lexer.dict_value
         if current_string == '+':
@@ -110,27 +135,19 @@ class Lexer:
         if current_string == '!=':
             dict_value = "ne_operator"
             return dict_value
-        if re.search('r'["/w"], current_string):
-            dict_value = "string literal"
-            return dict_value
 
     def next_line(self):  # gets the next line in the file
-            file_line = Lexer.file_line
-            row = Lexer.row
-            file_line.readline()
-            row += 1
-            return file_line
+            self.file_line.readline()
+            self.row += 1
+            return self.file_line
 
-    def get_next_char(self, file_line, col):
-        for character in file_line:
-            character[col + 1]
-
-        return character
+    def get_next_char(self, line, col):
+        return line[col + 1]
 
     def comments(self, file_line, col): # interprets whether or not there is a comment, so that it can be ignored
             row = Lexer.row
-            for character in file_line:
-                if character[col] == "/":
+            for line in file_line:
+                if line[col] == "/":
                     if self.get_next_char(file_line, col) == "*":
                         for char in file_line:
                             if char == "*" and self.get_next_char(file_line, col) == "/":

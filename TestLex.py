@@ -4,7 +4,7 @@
 import Scanner
 
 lex = Scanner.Lexer()
-print(lex.Token)
+print(lex.lex())
 #for i in lex.Token:
  #   print(i)
 
