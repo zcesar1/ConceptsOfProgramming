@@ -1,9 +1,13 @@
 package in.cpl;
 
+<<<<<<< HEAD
 import jdk.nashorn.internal.parser.Token;
 import jdk.nashorn.internal.runtime.ParserException;
 
 /*import Token;
+=======
+import Token;
+>>>>>>> origin/master
 import TokenType;
 import ParsableToken;
 import Scanner;*/
@@ -51,6 +55,9 @@ public class Parser{
 		 }
 		 else if (lookahead.token == Token.IF){
 			 ifLoop();
+		 }
+		 else if (lookahead.token == Token.FOR){
+			 forLoop();
 		 }
 	  }
 	 
@@ -119,16 +126,51 @@ public class Parser{
 		 //function funName is ... endfun main
 		//function funName return type integer ... endfun main
 		 nextToken();
-		 while(!lookahead.token == Token.END_FUNCTION){
-			 expression();
+		 if(lookahead.token == Token.IS){
+			 nextToken();
+			 while(!lookahead.token == Token.END_FUNCTION){
+				 expression();
+			 }
+			 nextToken();
+			 if(!lookahead.token == Token.MAIN){
+				 throw new ParserException("Main expected and "
+				          + lookahead.sequence + " found instead");
+			 }
+			 else{
+				 nextToken();
+			 }
 		 }
-		 nextToken();
-		 if(!lookahead.token == Token.MAIN){
-			 throw new ParserException("Main expected and "
-			          + lookahead.sequence + " found instead");
+		 else if(lookahead.token == Token.RETURN){
+			 nextToken();
+			 if(lookahead.token == Token.TYPE){
+				 nextToken(); 
+			 }
+			 else{
+				 throw new ParserException("Type expected and "
+				          + lookahead.sequence + " found instead");
+			 }
+			 if(lookahead.token == Token.INTEGER_TYPE){
+				 nextToken(); 
+			 }
+			 else{
+				 throw new ParserException("Integer type expected and "
+				          + lookahead.sequence + " found instead");
+			 }
+			 while(!lookahead.token == Token.END_FUNCTION){
+				 expression();
+			 }
+			 nextToken();
+			 if(!lookahead.token == Token.MAIN){
+				 throw new ParserException("Main expected and "
+				          + lookahead.sequence + " found instead");
+			 }
+			 else{
+				 nextToken();
+			 }
 		 }
 		 else{
-			 nextToken();
+			 throw new ParserException("Is or return expected and "
+			          + lookahead.sequence + " found instead");
 		 }
 	  }
 	 
@@ -175,127 +217,14 @@ public class Parser{
 		 }
 	  }
 	 
-	 
-	 
-	 
-	 
-	  private void signedTerm()
+	 private void forLoop()
 	  {
-	    if (lookahead.token == Token.PLUSMINUS)
-	    {
-	      // signed_term -> PLUSMINUS term
-	      nextToken();
-	      term();
-	    }
-	    else
-	    {
-	      // signed_term -> term
-	      term();
-	    }
-	  }
-	 
-	 private void term()
-	  {
-	    // term -> factor term_op
-	    factor();
-	    termOp();
-	  }
-
-	  private void termOp()
-	  {
-	    if (lookahead.token == Token.MULTDIV)
-	    {
-	      // term_op -> MULTDIV factor term_op
-	      nextToken();
-	      signedFactor();
-	      termOp();
-	    }
-	    else
-	    {
-	      // term_op -> EPSILON
-	    }
-	  }
-
-	  private void signedFactor()
-	  {
-	    if (lookahead.token == Token.PLUSMINUS)
-	    {
-	      // signed_factor -> PLUSMINUS factor
-	      nextToken();
-	      factor();
-	    }
-	    else
-	    {
-	      // signed_factor -> factor
-	      factor();
-	    }
-	  }
-	  
-	  private void factor()
-	  {
-	    // factor -> argument factor_op
-	    argument();
-	    factorOp();
-	  }
-
-	  private void factorOp()
-	  {
-	    if (lookahead.token == Token.RAISED)
-	    {
-	      // factor_op -> RAISED expression
-	      nextToken();
-	      signedFactor();
-	    }
-	    else
-	    {
-	      // factor_op -> EPSILON
-	    }
-	  }
-	  
-	  private void argument()
-	  {
-	    if (lookahead.token == Token.FUNCTION)
-	    {
-	      // argument -> FUNCTION argument
-	      nextToken();
-	      argument();
-	    }
-	    else if (lookahead.token == Token.OPEN_BRACKET)
-	    {
-	      // argument -> OPEN_BRACKET sum CLOSE_BRACKET
-	      nextToken();
-	      expression();
-
-	      if (lookahead.token != Token.CLOSE_BRACKET)
-	        throw new ParserException("Closing brackets expected and "
-	          + lookahead.sequence + " found instead");
-
-	      nextToken();
-	    }
-	    else
-	    {
-	      // argument -> value
-	      value();
-	    }
-	  }
-	  
-	  private void value()
-	  {
-	    if (lookahead.token == Token.NUMBER)
-	    {
-	      // argument -> NUMBER
-	      nextToken();
-	    }
-	    else if (lookahead.token == Token.VARIABLE)
-	    {
-	      // argument -> VARIABLE
-	      nextToken();
-	    }
-	    else
-	    {
-	      throw new ParserException(
-	        "Unexpected symbol "+lookahead.sequence+" found");
-	    }
+		 //for ... endfor
+		 nextToken();
+		 while(!lookahead.token == Token.END_FOR){
+			 expression();
+		 }
+		 nextToken();
 	  }
 	 
 }
