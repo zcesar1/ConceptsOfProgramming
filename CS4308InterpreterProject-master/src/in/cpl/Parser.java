@@ -47,6 +47,9 @@ public class Parser{
 		 else if (lookahead.token == Token.IF){
 			 ifLoop();
 		 }
+		 else if (lookahead.token == Token.FOR){
+			 forLoop();
+		 }
 	  }
 	 
 	 private void assign()
@@ -205,7 +208,15 @@ public class Parser{
 		 }
 	  }
 	 
-	 
+	 private void forLoop()
+	  {
+		 //for ... endfor
+		 nextToken();
+		 while(!lookahead.token == Token.END_FOR){
+			 expression();
+		 }
+		 nextToken();
+	  }
 	 
 	 
 	 
