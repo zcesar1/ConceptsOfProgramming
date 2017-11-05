@@ -1,6 +1,5 @@
 package in.cpl;
 
-import jdk.nashorn.internal.parser.Token;
 import Token;
 import TokenType;
 import ParsableToken;
