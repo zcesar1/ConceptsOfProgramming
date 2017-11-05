@@ -1,6 +1,7 @@
 package in.cpl;
 
-<<<<<<< HEAD
+import java.util.LinkedList;
+import java.util.List;
 import jdk.nashorn.internal.parser.Token;
 import jdk.nashorn.internal.runtime.ParserException;
 
