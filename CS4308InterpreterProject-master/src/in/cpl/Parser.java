@@ -1,5 +1,11 @@
 package in.cpl;
 
+import jdk.nashorn.internal.parser.Token;
+import Token;
+import TokenType;
+import ParsableToken;
+import Scanner;
+
 public class Parser{
 
 	 LinkedList<Token> tokens;
@@ -11,44 +17,76 @@ public class Parser{
 	    lookahead = this.tokens.getFirst();
 
 	    expression();
-
-	    if (lookahead.token != Token.EPSILON)
-	      throw new ParserException("Unexpected symbol %s found", lookahead);
 	  }
 
 	 private void nextToken()
 	  {
-	    tokens.pop();
-	    // at the end of input we return an epsilon token
-	    if (tokens.isEmpty())
-	      lookahead = new Token(Token.EPSILON, "", -1);
-	    else
-	      lookahead = tokens.getFirst();
+		 if(!tokens.isEmpty()){
+			 tokens.pop();
+		 }
+		 else{
+			 System.out.println("Token list empty");
+		 }
 	  }
 	 
 	 private void expression()
 	  {
-	    // expression -> signed_term sum_op
-	    signedTerm();
-	    sumOp();
+		 if (lookahead.token == Token.DEFINE){
+			 assign();
+		 }
+		 else if (lookahead.token == Token.BEGIN){
+			 beginLoop();
+		 }
+		 else if (lookahead.token == Token.WHILE){
+			 whileLoop();
+		 }
 	  }
 	 
-	 private void sumOp()
+	 private void assign()
 	  {
-	    if (lookahead.token == Token.PLUSMINUS)
+	    if (lookahead.token == Token.DEFINE)
 	    {
-	      // sum_op -> PLUSMINUS term sum_op
+	      // define varName = value type typeValue
 	      nextToken();
-	      term();
-	      sumOp();
+	      //term();
+	      //sumOp();
 	    }
 	    else
 	    {
-	      // sum_op -> EPSILON
 	    }
 	  }
 	 
-	 sum_op -> PLUSMINUS term sum_op
+	 private void beginLoop()
+	  {
+	    if (lookahead.token == Token.DEFINE)
+	    {
+	      // define varName = value type typeValue
+	      nextToken();
+	      //term();
+	      //sumOp();
+	    }
+	    else
+	    {
+	    }
+	  }
+	 
+	 private void whileLoop()
+	  {
+	    if (lookahead.token == Token.DEFINE)
+	    {
+	      // define varName = value type typeValue
+	      nextToken();
+	      //term();
+	      //sumOp();
+	    }
+	    else
+	    {
+	    }
+	  }
+	 
+	 
+	 
+	 
 	 
 	  private void signedTerm()
 	  {
