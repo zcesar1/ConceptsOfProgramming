@@ -35,11 +35,17 @@ public class Parser{
 		 if (lookahead.token == Token.DEFINE){
 			 assign();
 		 }
+		 else if (lookahead.token == Token.FUNCTION){
+			 functionLoop();
+		 }
 		 else if (lookahead.token == Token.BEGIN){
 			 beginLoop();
 		 }
 		 else if (lookahead.token == Token.WHILE){
 			 whileLoop();
+		 }
+		 else if (lookahead.token == Token.IF){
+			 ifLoop();
 		 }
 	  }
 	 
@@ -82,48 +88,86 @@ public class Parser{
 		 }
 		 else if(lookahead.token == Token.OF){
 			 nextToken();
+			 if(!lookahead.token == Token.TYPE){
+				 throw new ParserException("Type expected and "
+				          + lookahead.sequence + " found instead");
+			 }
+			 else{
+				 nextToken();
+			 }
+			 if(!lookahead.token == Token.INTEGER_TYPE){
+				 throw new ParserException("Integer type expected and "
+				          + lookahead.sequence + " found instead");
+			 }
+			 else{
+				 nextToken();
+			 }
 		 }
 		 else{
 			 throw new ParserException("Equals or Of expected and "
 			          + lookahead.sequence + " found instead");
 		 }
-		 
-		 if(!lookahead.token == Token.EQUALS){
-			 throw new ParserException("Equals expected and "
+	  }
+	 
+	 private void functionLoop()
+	  {
+		 //function funName is ... endfun main
+		//function funName return type integer ... endfun main
+		 nextToken();
+		 while(!lookahead.token == Token.END_FUNCTION){
+			 expression();
+		 }
+		 nextToken();
+		 if(!lookahead.token == Token.MAIN){
+			 throw new ParserException("Main expected and "
 			          + lookahead.sequence + " found instead");
 		 }
 		 else{
 			 nextToken();
 		 }
-	    
-	  }
-	 
-	 private void beginLoop()
-	  {
-	    if (lookahead.token == Token.DEFINE)
-	    {
-	      // define varName = value type typeValue
-	      nextToken();
-	      //term();
-	      //sumOp();
-	    }
-	    else
-	    {
-	    }
 	  }
 	 
 	 private void whileLoop()
 	  {
-	    if (lookahead.token == Token.DEFINE)
-	    {
-	      // define varName = value type typeValue
-	      nextToken();
-	      //term();
-	      //sumOp();
-	    }
-	    else
-	    {
-	    }
+		 //while ... endwhile
+		 nextToken();
+		 while(!lookahead.token == Token.END_WHILE){
+			 expression();
+		 }
+		 nextToken();
+	  }
+	 
+	 private void ifLoop()
+	  {
+		 //if ... endif
+		 nextToken();
+		 while(!lookahead.token == Token.END_IF){
+			 expression();
+		 }
+		 nextToken();
+	  }
+	 
+	 private void beginLoop()
+	  {
+		 //begin ... exit
+		 //begin ... return var
+		 nextToken();
+		 while(!lookahead.token == Token.EXIT  || !lookahead.token == Token.RETURN){
+			 expression();
+		 }
+		 if(lookahead.token == Token.EXIT){
+			 nextToken(); 
+		 }
+		 else if(lookahead.token == Token.RETURN){
+			 nextToken();
+			 if(lookahead.token == Token.VARIABLES){
+				 nextToken(); 
+			 }
+			 else{
+				 throw new ParserException("Variable expected and "
+				          + lookahead.sequence + " found instead");
+			 }
+		 }
 	  }
 	 
 	 
