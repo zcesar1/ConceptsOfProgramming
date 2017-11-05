@@ -114,16 +114,51 @@ public class Parser{
 		 //function funName is ... endfun main
 		//function funName return type integer ... endfun main
 		 nextToken();
-		 while(!lookahead.token == Token.END_FUNCTION){
-			 expression();
+		 if(lookahead.token == Token.IS){
+			 nextToken();
+			 while(!lookahead.token == Token.END_FUNCTION){
+				 expression();
+			 }
+			 nextToken();
+			 if(!lookahead.token == Token.MAIN){
+				 throw new ParserException("Main expected and "
+				          + lookahead.sequence + " found instead");
+			 }
+			 else{
+				 nextToken();
+			 }
 		 }
-		 nextToken();
-		 if(!lookahead.token == Token.MAIN){
-			 throw new ParserException("Main expected and "
-			          + lookahead.sequence + " found instead");
+		 else if(lookahead.token == Token.RETURN){
+			 nextToken();
+			 if(lookahead.token == Token.TYPE){
+				 nextToken(); 
+			 }
+			 else{
+				 throw new ParserException("Type expected and "
+				          + lookahead.sequence + " found instead");
+			 }
+			 if(lookahead.token == Token.INTEGER_TYPE){
+				 nextToken(); 
+			 }
+			 else{
+				 throw new ParserException("Integer type expected and "
+				          + lookahead.sequence + " found instead");
+			 }
+			 while(!lookahead.token == Token.END_FUNCTION){
+				 expression();
+			 }
+			 nextToken();
+			 if(!lookahead.token == Token.MAIN){
+				 throw new ParserException("Main expected and "
+				          + lookahead.sequence + " found instead");
+			 }
+			 else{
+				 nextToken();
+			 }
 		 }
 		 else{
-			 nextToken();
+			 throw new ParserException("Is or return expected and "
+			          + lookahead.sequence + " found instead");
 		 }
 	  }
 	 
