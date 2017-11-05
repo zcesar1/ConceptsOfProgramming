@@ -23,6 +23,7 @@ public class Parser{
 	  {
 		 if(!tokens.isEmpty()){
 			 tokens.pop();
+			 lookahead = tokens.getFirst();
 		 }
 		 else{
 			 System.out.println("Token list empty");
@@ -44,16 +45,57 @@ public class Parser{
 	 
 	 private void assign()
 	  {
-	    if (lookahead.token == Token.DEFINE)
-	    {
-	      // define varName = value type typeValue
-	      nextToken();
-	      //term();
-	      //sumOp();
-	    }
-	    else
-	    {
-	    }
+		// define varName = value type typeValue
+		// define varName of type typeValue
+		 nextToken();
+		 if(!lookahead.token == Token.VARIABLES){
+			 throw new ParserException("Variable expected and "
+			          + lookahead.sequence + " found instead");
+		 }
+		 else{
+			 nextToken();
+		 }
+		 
+		 if(lookahead.token == Token.EQUAL_SIGN){
+			 nextToken();
+			 if(!lookahead.token == Token.INTEGER){
+				 throw new ParserException("Integer expected and "
+				          + lookahead.sequence + " found instead");
+			 }
+			 else{
+				 nextToken();
+			 }
+			 if(!lookahead.token == Token.TYPE){
+				 throw new ParserException("Type expected and "
+				          + lookahead.sequence + " found instead");
+			 }
+			 else{
+				 nextToken();
+			 }
+			 if(!lookahead.token == Token.INTEGER_TYPE){
+				 throw new ParserException("Integer type expected and "
+				          + lookahead.sequence + " found instead");
+			 }
+			 else{
+				 nextToken();
+			 }
+		 }
+		 else if(lookahead.token == Token.OF){
+			 nextToken();
+		 }
+		 else{
+			 throw new ParserException("Equals or Of expected and "
+			          + lookahead.sequence + " found instead");
+		 }
+		 
+		 if(!lookahead.token == Token.EQUALS){
+			 throw new ParserException("Equals expected and "
+			          + lookahead.sequence + " found instead");
+		 }
+		 else{
+			 nextToken();
+		 }
+	    
 	  }
 	 
 	 private void beginLoop()
