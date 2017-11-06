@@ -71,6 +71,12 @@ public class Parser{
 			 else if (lookahead.token == Token.VARIABLES){
 				 variables();
 			 }
+			 else if (lookahead.token == Token.SET){
+				 set();
+			 }
+			 else if (lookahead.token == Token.PARAMETERS){
+				 parameters();
+			 }
 		 }
 	  }
 	 
@@ -271,7 +277,6 @@ public class Parser{
 			 throw new ParserException("Define expected and "
 			          + lookahead.sequence + " found instead");
 		 }
-		 
 	  }
 	 
 	 private void variables()
@@ -285,7 +290,39 @@ public class Parser{
 			 throw new ParserException("Define expected and "
 			          + lookahead.sequence + " found instead");
 		 }
-		 
+	  }
+	 
+	 private void set()
+	  {
+		 //set varName = value(other varName)
+		 nextToken();
+		 if(lookahead.token == Token.IDENTIFIER){
+			 nextToken(); 
+		 }
+		 else{
+			 throw new ParserException("Variable expected and "
+			          + lookahead.sequence + " found instead");
+		 }
+		 if(lookahead.token == Token.EQUAL_SIGN){
+			 nextToken(); 
+		 }
+		 else{
+			 throw new ParserException("Equal sign expected and "
+			          + lookahead.sequence + " found instead");
+		 }
+		 if(lookahead.token == Token.IDENTIFIER || lookahead.token == Token.INTEGER || lookahead.token == Token.FLOAT || lookahead.token == Token.STRING){
+			 nextToken(); 
+		 }
+		 else{
+			 throw new ParserException("Value expected and "
+			          + lookahead.sequence + " found instead");
+		 }
+	  }
+	 
+	 private void parameters()
+	  {
+		 //parameters varName ... integer
+		 assign();
 	  }
 	 
 }
