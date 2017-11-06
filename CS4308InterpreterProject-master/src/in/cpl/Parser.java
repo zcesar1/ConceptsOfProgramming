@@ -1,9 +1,20 @@
 package in.cpl;
 
+import java.util.LinkedList;
+import java.util.List;
+import jdk.nashorn.internal.parser.Token;
+import jdk.nashorn.internal.runtime.ParserException;
+
+/*import Token;
+=======
 import Token;
+>>>>>>> origin/master
 import TokenType;
 import ParsableToken;
-import Scanner;
+import Scanner;*/
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class Parser{
 
