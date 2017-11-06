@@ -21,6 +21,7 @@ public class Parser{
 	 private void nextToken()
 	  {
 		 if(!tokens.isEmpty()){
+			 System.out.println("Valid: " + lookahead);
 			 tokens.pop();
 			 lookahead = tokens.getFirst();
 		 }
@@ -49,6 +50,9 @@ public class Parser{
 		 else if (lookahead.token == Token.FOR){
 			 forLoop();
 		 }
+		 else if (lookahead.token == Token.INPUT){
+			 input();
+		 }
 	  }
 	 
 	 private void assign()
@@ -56,8 +60,8 @@ public class Parser{
 		// define varName = value type typeValue
 		// define varName of type typeValue
 		 nextToken();
-		 if(!lookahead.token == Token.VARIABLES){
-			 throw new ParserException("Variable expected and "
+		 if(!lookahead.token == Token.IDENTIFIER){
+			 throw new ParserException("Variable name expected and "
 			          + lookahead.sequence + " found instead");
 		 }
 		 else{
@@ -197,7 +201,7 @@ public class Parser{
 		 }
 		 else if(lookahead.token == Token.RETURN){
 			 nextToken();
-			 if(lookahead.token == Token.VARIABLES){
+			 if(lookahead.token == Token.IDENTIFIER){
 				 nextToken(); 
 			 }
 			 else{
@@ -215,6 +219,26 @@ public class Parser{
 			 expression();
 		 }
 		 nextToken();
+	  }
+	 
+	 private void input()
+	  {
+		 //input "input string", variable
+		 nextToken();
+		 if(lookahead.token == Token.STRING){
+			 nextToken(); 
+		 }
+		 else{
+			 throw new ParserException("String expected and "
+			          + lookahead.sequence + " found instead");
+		 }
+		 if(lookahead.token == Token.IDENTIFIER){
+			 nextToken(); 
+		 }
+		 else{
+			 throw new ParserException("Variable expected and "
+			          + lookahead.sequence + " found instead");
+		 }
 	  }
 	 
 }
