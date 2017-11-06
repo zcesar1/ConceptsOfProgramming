@@ -64,6 +64,9 @@ public class Parser{
 		 else if (lookahead.token == Token.INPUT){
 			 input();
 		 }
+		 else if (lookahead.token == Token.CONSTANTS){
+			 constants();
+		 }
 	  }
 	 
 	 private void assign()
@@ -250,6 +253,20 @@ public class Parser{
 			 throw new ParserException("Variable expected and "
 			          + lookahead.sequence + " found instead");
 		 }
+	  }
+	 
+	 private void constants()
+	  {
+		 //constants define ... integer
+		 nextToken();
+		 if(lookahead.token == Token.DEFINE){
+			 assign(); 
+		 }
+		 else{
+			 throw new ParserException("Define expected and "
+			          + lookahead.sequence + " found instead");
+		 }
+		 
 	  }
 	 
 }
