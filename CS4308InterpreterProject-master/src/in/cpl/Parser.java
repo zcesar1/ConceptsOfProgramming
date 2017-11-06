@@ -43,29 +43,34 @@ public class Parser{
 	 
 	 private void expression()
 	  {
-		 if (lookahead.token == Token.DEFINE){
-			 assign();
-		 }
-		 else if (lookahead.token == Token.FUNCTION){
-			 functionLoop();
-		 }
-		 else if (lookahead.token == Token.BEGIN){
-			 beginLoop();
-		 }
-		 else if (lookahead.token == Token.WHILE){
-			 whileLoop();
-		 }
-		 else if (lookahead.token == Token.IF){
-			 ifLoop();
-		 }
-		 else if (lookahead.token == Token.FOR){
-			 forLoop();
-		 }
-		 else if (lookahead.token == Token.INPUT){
-			 input();
-		 }
-		 else if (lookahead.token == Token.CONSTANTS){
-			 constants();
+		 while(!tokens.isEmpty()){
+			 if (lookahead.token == Token.DEFINE){
+				 assign();
+			 }
+			 else if (lookahead.token == Token.FUNCTION){
+				 functionLoop();
+			 }
+			 else if (lookahead.token == Token.BEGIN){
+				 beginLoop();
+			 }
+			 else if (lookahead.token == Token.WHILE){
+				 whileLoop();
+			 }
+			 else if (lookahead.token == Token.IF){
+				 ifLoop();
+			 }
+			 else if (lookahead.token == Token.FOR){
+				 forLoop();
+			 }
+			 else if (lookahead.token == Token.INPUT){
+				 input();
+			 }
+			 else if (lookahead.token == Token.CONSTANTS){
+				 constants();
+			 }
+			 else if (lookahead.token == Token.VARIABLES){
+				 variables();
+			 }
 		 }
 	  }
 	 
@@ -258,6 +263,20 @@ public class Parser{
 	 private void constants()
 	  {
 		 //constants define ... integer
+		 nextToken();
+		 if(lookahead.token == Token.DEFINE){
+			 assign(); 
+		 }
+		 else{
+			 throw new ParserException("Define expected and "
+			          + lookahead.sequence + " found instead");
+		 }
+		 
+	  }
+	 
+	 private void variables()
+	  {
+		 //variables define ... integer
 		 nextToken();
 		 if(lookahead.token == Token.DEFINE){
 			 assign(); 
