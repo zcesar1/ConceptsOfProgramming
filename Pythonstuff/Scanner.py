@@ -28,8 +28,12 @@ class Lexer:
             string = ""
             # for index in file_line: # index gives line of the file
             for line in file_line:  # prints the file line (ends with \n)
-                for letter in line:
-                    if letter == "/":  # checks for comments
+                while(re.search(r'[\s]]', file_line[col])):
+                    print(line[col])
+                    col += 1
+               # for letter in line:
+
+                ''' if letter == "/":  # checks for comments
                         self.comments(file_line, col)
 
                     #   re.search(r'[a-zA-Z]', letter)
@@ -71,7 +75,7 @@ class Lexer:
                             col += 1
                 return current_string
 
-
+'''
     ''' 
 
 elif self.get_next_char(file_line, col) == '':
