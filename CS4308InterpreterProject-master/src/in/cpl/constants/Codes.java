@@ -45,6 +45,8 @@ public class Codes {
     public static final int UNTIL_CODE = 1401;
     public static final int WHILE_CODE = 1402;
 
+    public static final int COMMENTS_CODE = 1404;
+
     public static final int  EOF_CODE = 1202;
    /* public static final int INTEGER_CODE = 1000;
     public static final int FLOAT_CODE = 1001;
@@ -135,6 +137,7 @@ public class Codes {
         codeLookup.put(TokenType.UNTIL, UNTIL_CODE);
         codeLookup.put(TokenType.WHILE, WHILE_CODE);
 
+        codeLookup.put(TokenType.COMMENTS, COMMENTS_CODE);
 
         codeLookup.put(TokenType.EOF, EOF_CODE);
 

@@ -60,6 +60,8 @@ public enum TokenType {
     UNTIL("until"),
     WHILE("while"),
 
+    COMMENTS("--"),
+
     EOF(null);
     /*INTEGER(null),
     FLOAT(null),

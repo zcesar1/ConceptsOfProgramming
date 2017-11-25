@@ -79,6 +79,7 @@ public class Scanner implements Iterator<Token> {
         } catch (NumberFormatException e) {
             // Also ugly and also works
         }
+
         /*try {
             String s = String.valueOf(Float.parseFloat(lexeme)); // If the parse fails, the lexeme is not a float
             return buildToken(TokenType.FLOAT, s);
