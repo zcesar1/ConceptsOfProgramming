@@ -2,9 +2,66 @@ package in.cpl;
 
 import java.util.HashMap;
 
+/*LUA has one data type, int, identifiers are single letters
+* not case sensitive
+* id -> letter
+* literal_integer -> digit literal_integer | digit
+* assignment_operator -> =
+* le_operator -> <=
+* lt_operator -> <
+* ge_operator -> >=
+* gt_operator -> >
+* eq_operator -> ==
+* ne_operator -> ~=
+* add_operator -> +
+* sub_operator -> -
+* mul_operator -> *
+* div_operator -> /*/
+
 public enum TokenType {
 
     INTEGER(null),
+
+    ID("^[a-zA-Z]*$"),
+    //LITERAL_INTEGER(digit literal_integer | digit),
+    ASSIGNMENT_OPERATOR("="),
+    LE_OPERATOR("<="),
+    LT_OPERATOR("<"),
+    GE_OPERATOR(">="),
+    GT_OPERATOR(">"),
+    EQ_OPERATOR("=="),
+    NE_OPERATOR("~="),
+    ADD_OPERATOR("+"),
+    SUB_OPERATOR("-"),
+    MUL_OPERATOR("*"),
+    DIV_OPERATOR("/"),
+    LEFT_PAREN("("),
+    RIGHT_PAREN(")"),
+
+    AND("and"),
+    BREAK("break"),
+    DO("do"),
+    ELSE("else"),
+    ELSEIF("elseif"),
+    END("end"),
+    FALSE("false"),
+    FOR("for"),
+    FUNCTION("function"),
+    IF("if"),
+    IN("in"),
+    LOCAL("local"),
+    NIL("nil"),
+    NOT("not"),
+    OR("or"),
+    REPEAT("repeat"),
+    RETURN("return"),
+    THEN("then"),
+    TRUE("true"),
+    UNTIL("until"),
+    WHILE("while"),
+
+    EOF(null);
+    /*INTEGER(null),
     FLOAT(null),
     IDENTIFIER(null),
     STRING(null),
@@ -47,7 +104,7 @@ public enum TokenType {
     INTEGER_TYPE("integer"),
 
     EOF(null);
-
+*/
     private static HashMap<String, TokenType> lookUpTable = new HashMap<>();
 
     static {

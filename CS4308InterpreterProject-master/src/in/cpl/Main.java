@@ -16,7 +16,8 @@ public class Main {
         java.util.Scanner scanner = new java.util.Scanner(System.in);
         System.out.println("Please select one: \"scan\" \"parse\" \"interpret\"");
         String select = scanner.nextLine();
-        File file = new File("projectResources/sclex1.scl");
+        //File file = new File("projectResources/sclex1.scl");
+        File file = new File("projectResources/test_lua.lua");
         String input = null;
         try {
             input = readFile(file.getAbsolutePath());
@@ -64,7 +65,14 @@ public class Main {
                     // Check to see if we need to use the lookup tables
                     Integer parameterCode = null;
                     Integer literalCode = null;
-                    if (TokenType.IDENTIFIER.equals(token.getTokenType())) {
+                    if (TokenType.ID.equals(token.getTokenType())) {
+                        parameterCode = parameterLookup.size();
+                        parameterLookup.put(parameterCode, token.getLexeme());
+                    } else if (TokenType.INTEGER.equals(token.getTokenType())) {
+                        literalCode = literalLookup.size();
+                        literalLookup.put(literalCode, token.getLexeme());
+                    }
+                    /*if (TokenType.IDENTIFIER.equals(token.getTokenType())) {
                         parameterCode = parameterLookup.size();
                         parameterLookup.put(parameterCode, token.getLexeme());
                     } else if (TokenType.INTEGER.equals(token.getTokenType())
@@ -72,7 +80,7 @@ public class Main {
                             || TokenType.STRING.equals(token.getTokenType())) {
                         literalCode = literalLookup.size();
                         literalLookup.put(literalCode, token.getLexeme());
-                    }
+                    } */
 
                     // Make the new Parsable token
                     return new ParsableToken(

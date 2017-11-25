@@ -79,7 +79,7 @@ public class Scanner implements Iterator<Token> {
         } catch (NumberFormatException e) {
             // Also ugly and also works
         }
-        try {
+        /*try {
             String s = String.valueOf(Float.parseFloat(lexeme)); // If the parse fails, the lexeme is not a float
             return buildToken(TokenType.FLOAT, s);
         } catch (NumberFormatException e) {
@@ -89,8 +89,8 @@ public class Scanner implements Iterator<Token> {
             return buildToken(TokenType.STRING, lexeme); // lexeme has quotes so it is a string
         } else {
             return buildToken(TokenType.IDENTIFIER, lexeme); // blocks of text are simply just identifiers
-        }
-
+        }*/
+        return buildToken(TokenType.ID, lexeme);
     }
 
     // Check if there is a token that can be built with a single character
