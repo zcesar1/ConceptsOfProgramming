@@ -54,7 +54,7 @@ public class Parser{
 				 repeat();
 			 }
 			 else if (lookahead.token == Token.PRINT){
-				 print();
+				 printLoop();
 			 }
 		 }
 	  }
@@ -155,7 +155,7 @@ public class Parser{
 		 booleanFun();
 	  }
 	 
-	 private void print()
+	 private void printLoop()
 	  {
 		 //<print_statement> → print ( <arithmetic_expression> )
 		 nextToken();
