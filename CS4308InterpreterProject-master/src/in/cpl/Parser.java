@@ -1,4 +1,3 @@
-/*
 package in.cpl;
 
 import java.util.LinkedList;
@@ -39,14 +38,11 @@ public class Parser{
 	 private void expression()
 	  {
 		 while(!tokens.isEmpty()){
-			 if (lookahead.token == Token.DEFINE){
+			 if (lookahead.token == Token.ID){
 				 assign();
 			 }
 			 else if (lookahead.token == Token.FUNCTION){
-				 functionLoop();
-			 }
-			 else if (lookahead.token == Token.BEGIN){
-				 beginLoop();
+				 function();
 			 }
 			 else if (lookahead.token == Token.WHILE){
 				 whileLoop();
@@ -54,271 +50,188 @@ public class Parser{
 			 else if (lookahead.token == Token.IF){
 				 ifLoop();
 			 }
-			 else if (lookahead.token == Token.FOR){
-				 forLoop();
+			 else if (lookahead.token == Token.REPEAT){
+				 repeat();
 			 }
-			 else if (lookahead.token == Token.INPUT){
-				 input();
-			 }
-			 else if (lookahead.token == Token.CONSTANTS){
-				 constants();
-			 }
-			 else if (lookahead.token == Token.VARIABLES){
-				 variables();
-			 }
-			 else if (lookahead.token == Token.SET){
-				 set();
-			 }
-			 else if (lookahead.token == Token.PARAMETERS){
-				 parameters();
+			 else if (lookahead.token == Token.PRINT){
+				 print();
 			 }
 		 }
 	  }
 	 
 	 private void assign()
 	  {
-		// define varName = value type typeValue
-		// define varName of type typeValue
+		//<assignment_statement> -> id <assignment_operator> <arithmetic_expression>
 		 nextToken();
-		 if(!lookahead.token == Token.IDENTIFIER){
-			 throw new ParserException("Variable name expected and "
+		 if(!lookahead.token == Token.ASSIGNMENT_OPERATOR){
+			 throw new ParserException("Assignment operator expected and "
 			          + lookahead.sequence + " found instead");
 		 }
 		 else{
 			 nextToken();
 		 }
-		 
-		 if(lookahead.token == Token.EQUAL_SIGN){
-			 nextToken();
-			 if(!lookahead.token == Token.INTEGER){
-				 throw new ParserException("Integer expected and "
-				          + lookahead.sequence + " found instead");
-			 }
-			 else{
-				 nextToken();
-			 }
-			 if(!lookahead.token == Token.TYPE){
-				 throw new ParserException("Type expected and "
-				          + lookahead.sequence + " found instead");
-			 }
-			 else{
-				 nextToken();
-			 }
-			 if(!lookahead.token == Token.INTEGER_TYPE){
-				 throw new ParserException("Integer type expected and "
-				          + lookahead.sequence + " found instead");
-			 }
-			 else{
-				 nextToken();
-			 }
-		 }
-		 else if(lookahead.token == Token.OF){
-			 nextToken();
-			 if(!lookahead.token == Token.TYPE){
-				 throw new ParserException("Type expected and "
-				          + lookahead.sequence + " found instead");
-			 }
-			 else{
-				 nextToken();
-			 }
-			 if(!lookahead.token == Token.INTEGER_TYPE){
-				 throw new ParserException("Integer type expected and "
-				          + lookahead.sequence + " found instead");
-			 }
-			 else{
-				 nextToken();
-			 }
-		 }
-		 else{
-			 throw new ParserException("Equals or Of expected and "
-			          + lookahead.sequence + " found instead");
-		 }
+		 arithmetic(); 
 	  }
 	 
-	 private void functionLoop()
+	 private void function()
 	  {
-		 //function funName is ... endfun main
-		//function funName return type integer ... endfun main
+		 //<program> → function id ( ) <block> end
 		 nextToken();
-		 if(lookahead.token == Token.IS){
-			 nextToken();
-			 while(!lookahead.token == Token.END_FUNCTION){
-				 expression();
-			 }
-			 nextToken();
-			 if(!lookahead.token == Token.MAIN){
-				 throw new ParserException("Main expected and "
-				          + lookahead.sequence + " found instead");
-			 }
-			 else{
-				 nextToken();
-			 }
-		 }
-		 else if(lookahead.token == Token.RETURN){
-			 nextToken();
-			 if(lookahead.token == Token.TYPE){
-				 nextToken(); 
-			 }
-			 else{
-				 throw new ParserException("Type expected and "
-				          + lookahead.sequence + " found instead");
-			 }
-			 if(lookahead.token == Token.INTEGER_TYPE){
-				 nextToken(); 
-			 }
-			 else{
-				 throw new ParserException("Integer type expected and "
-				          + lookahead.sequence + " found instead");
-			 }
-			 while(!lookahead.token == Token.END_FUNCTION){
-				 expression();
-			 }
-			 nextToken();
-			 if(!lookahead.token == Token.MAIN){
-				 throw new ParserException("Main expected and "
-				          + lookahead.sequence + " found instead");
-			 }
-			 else{
-				 nextToken();
-			 }
-		 }
-		 else{
-			 throw new ParserException("Is or return expected and "
+		 if(!lookahead.token == Token.ID){
+		 throw new ParserException("ID expected and "
 			          + lookahead.sequence + " found instead");
 		 }
-	  }
+		 else{
+			 nextToken();
+		 } 
+		 if(!lookahead.token == Token.LEFT_PAREN){
+		 throw new ParserException("Left parenthesis expected and "
+			          + lookahead.sequence + " found instead");
+		 }
+		 else{
+			 nextToken();
+		 } 
+		 if(!lookahead.token == Token.RIGHT_PAREN){
+		 throw new ParserException("Right parenthesis expected and "
+			          + lookahead.sequence + " found instead");
+		 }
+		 else{
+			 nextToken();
+		 } 
+		 while(!lookahead.token == Token.END){
+			 statement();
+		 }
+		 nextToken();
+		}
 	 
 	 private void whileLoop()
 	  {
-		 //while ... endwhile
+		 //while <boolean_expression> do <block> end
 		 nextToken();
-		 while(!lookahead.token == Token.END_WHILE){
-			 expression();
+		 booleanFun();
+		 if(!lookahead.token == Token.DO){
+		 throw new ParserException("Do expected and "
+			          + lookahead.sequence + " found instead");
+		 }
+		 else{
+			 nextToken();
+		 }
+		 while(!lookahead.token == Token.END){
+			 statement();
 		 }
 		 nextToken();
 	  }
 	 
 	 private void ifLoop()
 	  {
-		 //if ... endif
+		 //if <boolean_expression> then <block> else <block> end
 		 nextToken();
-		 while(!lookahead.token == Token.END_IF){
-			 expression();
+		 booleanFun();
+		 if(!lookahead.token == Token.THEN){
+		 throw new ParserException("Then expected and "
+			          + lookahead.sequence + " found instead");
 		 }
-		 nextToken();
-	  }
-	 
-	 private void beginLoop()
-	  {
-		 //begin ... exit
-		 //begin ... return var
-		 nextToken();
-		 while(!lookahead.token == Token.EXIT  || !lookahead.token == Token.RETURN){
-			 expression();
-		 }
-		 if(lookahead.token == Token.EXIT){
-			 nextToken(); 
-		 }
-		 else if(lookahead.token == Token.RETURN){
+		 else{
 			 nextToken();
-			 if(lookahead.token == Token.IDENTIFIER){
-				 nextToken(); 
-			 }
-			 else{
-				 throw new ParserException("Variable expected and "
-				          + lookahead.sequence + " found instead");
-			 }
 		 }
-	  }
-	 
-	 private void forLoop()
-	  {
-		 //for ... endfor
+		 while(!lookahead.token == Token.ELSE){
+			 statement();
+		 }
 		 nextToken();
-		 while(!lookahead.token == Token.END_FOR){
-			 expression();
+		 while(!lookahead.token == Token.END){
+			 statement();
 		 }
 		 nextToken();
 	  }
 	 
-	 private void input()
+	 private void repeat()
 	  {
-		 //input "input string", variable
+		 //<repeat_statement> -> repeat <block> until <boolean_expression>
 		 nextToken();
-		 if(lookahead.token == Token.STRING){
+		 while(!lookahead.token == Token.UNTIL){
+			 statement();
+		 }
+		 nextToken();
+		 booleanFun();
+	  }
+	 
+	 private void print()
+	  {
+		 //<print_statement> → print ( <arithmetic_expression> )
+		 nextToken();
+		 if(!lookahead.token == Token.LEFT_PAREN){
+			  throw new ParserException("Left parenthesis expected and "
+			          + lookahead.sequence + " found instead");
+		 }
+		 else{
+			 nextToken(); 
+		 }
+		 arithmetic();
+		 if(!lookahead.token == Token.RIGHT_PAREN){
+			  throw new ParserException("Right parenthesis expected and "
+			          + lookahead.sequence + " found instead");
+		 }
+		 else{
+			 nextToken(); 
+		 }
+	  }
+	 
+	 private void booleanFun()
+	  {
+		 //<boolean_expression> → <relative_op> <arithmetic_expression> <arithmetic_expression>
+		 relativeOp();
+		 arithmetic();
+		 arithmetic();
+	  }
+	 
+	 private void relativeOp()
+	 {
+	 	if(lookahead.token == Token.LE_OPERATOR || lookahead.token == Token.LT_OPERATOR || lookahead.token == Token.GE_OPERATOR
+	 	|| lookahead.token == Token.GT_OPERATOR || lookahead.token == Token.EQ_OPERATOR || lookahead.token == Token.NE_OPERATOR){
 			 nextToken(); 
 		 }
 		 else{
-			 throw new ParserException("String expected and "
+			 throw new ParserException("Relative operator expected and "
 			          + lookahead.sequence + " found instead");
 		 }
-		 if(lookahead.token == Token.IDENTIFIER){
+	 }
+	 
+	 private void arithmetic()
+	  {
+		 /*<arithmetic_expression> → <id> | <literal_integer> |
+		  *  <arithmetic_op> <arithmetic_expression> <arithmetic_expression>
+		  */
+		 if(lookahead.token == Token.ID || lookahead.token == Token.LITERAL_INTEGER){
 			 nextToken(); 
 		 }
+		 else if(lookahead.token == Token.ADD_OPERATOR || lookahead.token == Token.SUB_OPERATOR
+				 || lookahead.token == Token.MUL_OPERATOR || lookahead.token == Token.DIV_OPERATOR){
+			 arithmetic();
+			 arithmetic();
+		 }
 		 else{
-			 throw new ParserException("Variable expected and "
+			 throw new ParserException("ID, integer, or arithmetic operator expected and "
 			          + lookahead.sequence + " found instead");
 		 }
 	  }
 	 
-	 private void constants()
-	  {
-		 //constants define ... integer
-		 nextToken();
-		 if(lookahead.token == Token.DEFINE){
-			 assign(); 
+	 private void statement()
+	 {
+		 if (lookahead.token == Token.ID){
+			 assign();
 		 }
-		 else{
-			 throw new ParserException("Define expected and "
-			          + lookahead.sequence + " found instead");
+		 else if (lookahead.token == Token.WHILE){
+			 whileLoop();
 		 }
-	  }
-	 
-	 private void variables()
-	  {
-		 //variables define ... integer
-		 nextToken();
-		 if(lookahead.token == Token.DEFINE){
-			 assign(); 
+		 else if (lookahead.token == Token.IF){
+			 ifLoop();
 		 }
-		 else{
-			 throw new ParserException("Define expected and "
-			          + lookahead.sequence + " found instead");
+		 else if (lookahead.token == Token.REPEAT){
+			 repeat();
 		 }
-	  }
-	 
-	 private void set()
-	  {
-		 //set varName = value(other varName)
-		 nextToken();
-		 if(lookahead.token == Token.IDENTIFIER){
-			 nextToken(); 
+		 else if (lookahead.token == Token.PRINT){
+			 print();
 		 }
-		 else{
-			 throw new ParserException("Variable expected and "
-			          + lookahead.sequence + " found instead");
-		 }
-		 if(lookahead.token == Token.EQUAL_SIGN){
-			 nextToken(); 
-		 }
-		 else{
-			 throw new ParserException("Equal sign expected and "
-			          + lookahead.sequence + " found instead");
-		 }
-		 if(lookahead.token == Token.IDENTIFIER || lookahead.token == Token.INTEGER || lookahead.token == Token.FLOAT || lookahead.token == Token.STRING){
-			 nextToken(); 
-		 }
-		 else{
-			 throw new ParserException("Value expected and "
-			          + lookahead.sequence + " found instead");
-		 }
-	  }
-	 
-	 private void parameters()
-	  {
-		 //parameters varName ... integer
-		 assign();
-	  }
+	 }
 	 
 }
-*/
