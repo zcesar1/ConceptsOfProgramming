@@ -5,10 +5,10 @@ import java.util.List;
 import jdk.nashorn.internal.parser.Token;
 import jdk.nashorn.internal.runtime.ParserException;
 
-import Token;
-import TokenType;
-import ParsableToken;
-import Scanner;
+//import in.cpl.Token.*;
+//import in.cpl.TokenType.*;
+//import in.cpl.ParsableToken.*;
+//import in.cpl.Scanner.*;
 
 public class Parser{
 
