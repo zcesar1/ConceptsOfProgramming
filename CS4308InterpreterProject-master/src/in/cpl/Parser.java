@@ -17,7 +17,7 @@ public class Parser{
 	  
 	 public void parse(List<Token> tokens)
 	  {
-	    this.tokens = (LinkedList<Token>) tokens.clone();
+	    this.tokens = (LinkedList<Token>) tokens;//tokens.clone()
 	    lookahead = this.tokens.getFirst();
 
 	    expression();

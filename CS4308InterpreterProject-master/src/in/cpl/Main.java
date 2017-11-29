@@ -36,6 +36,7 @@ public class Main {
             case "parse":
                 // TODO
                 System.err.println("Not implemented yet!");
+
                 return;
             case "interpret":
                 // TODO

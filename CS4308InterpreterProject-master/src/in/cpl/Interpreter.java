@@ -4,7 +4,7 @@ import in.cpl.constants.Codes;
 //import in.cpl.TokenType;
 //import in.cpl.Parser;
 public class Interpreter {
-    public class ArithmeticExpression {
+    public static class ArithmeticExpression {
 
         //private int token_code = TokenType.LITERAL_INTEGER;
         private int token_code = Codes.INTEGER_CODE;
@@ -84,7 +84,7 @@ public class Interpreter {
     }
 
 
-    public class BooleanExpression {
+    public class BooleanExpression extends ArithmeticExpression {
 
         private ArithmeticExpression left;
         private ArithmeticExpression right;
