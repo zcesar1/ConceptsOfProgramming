@@ -2,8 +2,8 @@ package in.cpl;
 
 import java.util.LinkedList;
 import java.util.List;
-import jdk.nashorn.internal.parser.Token;
 import jdk.nashorn.internal.runtime.ParserException;
+
 
 //import in.cpl.Token.*;
 //import in.cpl.TokenType.*;
@@ -34,28 +34,28 @@ public class Parser{
 			 System.out.println("Token list empty");
 		 }
 	  }
-	 
+
 	 private void expression()
 	  {
 		 while(!tokens.isEmpty()){
-			 if (lookahead.token == Token.ID){
+			 if (lookahead.getTokenType() == TokenType.ID){
 				 assign();
 			 }
-			 else if (lookahead.token == Token.FUNCTION){
+			 else if (lookahead.getTokenType() == TokenType.FUNCTION){
 				 function();
 			 }
-			 else if (lookahead.token == Token.WHILE){
+			 else if (lookahead.getTokenType() == TokenType.WHILE){
 				 whileLoop();
 			 }
-			 else if (lookahead.token == Token.IF){
+			 else if (lookahead.getTokenType() == TokenType.IF){
 				 ifLoop();
 			 }
-			 else if (lookahead.token == Token.REPEAT){
+			 else if (lookahead.getTokenType() == TokenType.REPEAT){
 				 repeat();
 			 }
-			 else if (lookahead.token == Token.PRINT){
+			 /*else if (lookahead.token == TokenType.PRINT){
 				 printLoop();
-			 }
+			 }*/
 		 }
 	  }
 	 
@@ -63,9 +63,9 @@ public class Parser{
 	  {
 		//<assignment_statement> -> id <assignment_operator> <arithmetic_expression>
 		 nextToken();
-		 if(!lookahead.token == Token.ASSIGNMENT_OPERATOR){
+		 if(lookahead.getTokenType() != TokenType.ASSIGNMENT_OPERATOR){
 			 throw new ParserException("Assignment operator expected and "
-			          + lookahead.sequence + " found instead");
+			          + lookahead.getLexeme() + " found instead");
 		 }
 		 else{
 			 nextToken();
@@ -77,28 +77,28 @@ public class Parser{
 	  {
 		 //<program> → function id ( ) <block> end
 		 nextToken();
-		 if(!lookahead.token == Token.ID){
+		 if(lookahead.getTokenType() != TokenType.ID){
 		 throw new ParserException("ID expected and "
-			          + lookahead.sequence + " found instead");
+			          + lookahead.getLexeme() + " found instead");
 		 }
 		 else{
 			 nextToken();
 		 } 
-		 if(!lookahead.token == Token.LEFT_PAREN){
+		 if(lookahead.getTokenType() != TokenType.LEFT_PAREN){
 		 throw new ParserException("Left parenthesis expected and "
-			          + lookahead.sequence + " found instead");
+			          + lookahead.getLexeme() + " found instead");
 		 }
 		 else{
 			 nextToken();
 		 } 
-		 if(!lookahead.token == Token.RIGHT_PAREN){
+		 if(lookahead.getTokenType() != TokenType.RIGHT_PAREN){
 		 throw new ParserException("Right parenthesis expected and "
-			          + lookahead.sequence + " found instead");
+			          + lookahead.getLexeme() + " found instead");
 		 }
 		 else{
 			 nextToken();
 		 } 
-		 while(!lookahead.token == Token.END){
+		 while(lookahead.getTokenType() != TokenType.END){
 			 statement();
 		 }
 		 nextToken();
@@ -109,14 +109,14 @@ public class Parser{
 		 //while <boolean_expression> do <block> end
 		 nextToken();
 		 booleanFun();
-		 if(!lookahead.token == Token.DO){
+		 if(lookahead.getTokenType() != TokenType.DO){
 		 throw new ParserException("Do expected and "
-			          + lookahead.sequence + " found instead");
+			          + lookahead.getLexeme() + " found instead");
 		 }
 		 else{
 			 nextToken();
 		 }
-		 while(!lookahead.token == Token.END){
+		 while(lookahead.getTokenType() == TokenType.END){
 			 statement();
 		 }
 		 nextToken();
@@ -127,18 +127,18 @@ public class Parser{
 		 //if <boolean_expression> then <block> else <block> end
 		 nextToken();
 		 booleanFun();
-		 if(!lookahead.token == Token.THEN){
+		 if(lookahead.getTokenType() != TokenType.THEN){
 		 throw new ParserException("Then expected and "
-			          + lookahead.sequence + " found instead");
+			          + lookahead.getLexeme() + " found instead");
 		 }
 		 else{
 			 nextToken();
 		 }
-		 while(!lookahead.token == Token.ELSE){
+		 while(lookahead.getTokenType() != TokenType.ELSE){
 			 statement();
 		 }
 		 nextToken();
-		 while(!lookahead.token == Token.END){
+		 while(lookahead.getTokenType() != TokenType.END){
 			 statement();
 		 }
 		 nextToken();
@@ -148,7 +148,7 @@ public class Parser{
 	  {
 		 //<repeat_statement> -> repeat <block> until <boolean_expression>
 		 nextToken();
-		 while(!lookahead.token == Token.UNTIL){
+		 while(lookahead.getTokenType() != TokenType.UNTIL){
 			 statement();
 		 }
 		 nextToken();
@@ -159,17 +159,17 @@ public class Parser{
 	  {
 		 //<print_statement> → print ( <arithmetic_expression> )
 		 nextToken();
-		 if(!lookahead.token == Token.LEFT_PAREN){
+		 if(lookahead.getTokenType() != TokenType.LEFT_PAREN){
 			  throw new ParserException("Left parenthesis expected and "
-			          + lookahead.sequence + " found instead");
+			          + lookahead.getLexeme() + " found instead");
 		 }
 		 else{
-			 nextToken(); 
+			 nextToken();
 		 }
 		 arithmetic();
-		 if(!lookahead.token == Token.RIGHT_PAREN){
+		 if(lookahead.getTokenType() != TokenType.RIGHT_PAREN){
 			  throw new ParserException("Right parenthesis expected and "
-			          + lookahead.sequence + " found instead");
+			          + lookahead.getLexeme() + " found instead");
 		 }
 		 else{
 			 nextToken(); 
@@ -186,13 +186,13 @@ public class Parser{
 	 
 	 private void relativeOp()
 	 {
-	 	if(lookahead.token == Token.LE_OPERATOR || lookahead.token == Token.LT_OPERATOR || lookahead.token == Token.GE_OPERATOR
-	 	|| lookahead.token == Token.GT_OPERATOR || lookahead.token == Token.EQ_OPERATOR || lookahead.token == Token.NE_OPERATOR){
+	 	if(lookahead.getTokenType() == TokenType.LE_OPERATOR || lookahead.getTokenType() == TokenType.LT_OPERATOR || lookahead.getTokenType() == TokenType.GE_OPERATOR
+	 	|| lookahead.getTokenType() == TokenType.GT_OPERATOR || lookahead.getTokenType() == TokenType.EQ_OPERATOR || lookahead.getTokenType() == TokenType.NE_OPERATOR){
 			 nextToken(); 
 		 }
 		 else{
 			 throw new ParserException("Relative operator expected and "
-			          + lookahead.sequence + " found instead");
+			          + lookahead.getLexeme() + " found instead");
 		 }
 	 }
 	 
@@ -201,37 +201,37 @@ public class Parser{
 		 /*<arithmetic_expression> → <id> | <literal_integer> |
 		  *  <arithmetic_op> <arithmetic_expression> <arithmetic_expression>
 		  */
-		 if(lookahead.token == Token.ID || lookahead.token == Token.LITERAL_INTEGER){
+		 if(lookahead.getTokenType() == TokenType.ID || lookahead.getTokenType() == TokenType.INTEGER){
 			 nextToken(); 
 		 }
-		 else if(lookahead.token == Token.ADD_OPERATOR || lookahead.token == Token.SUB_OPERATOR
-				 || lookahead.token == Token.MUL_OPERATOR || lookahead.token == Token.DIV_OPERATOR){
+		 else if(lookahead.getTokenType() == TokenType.ADD_OPERATOR || lookahead.getTokenType() == TokenType.SUB_OPERATOR
+				 || lookahead.getTokenType() == TokenType.MUL_OPERATOR || lookahead.getTokenType() == TokenType.DIV_OPERATOR){
 			 arithmetic();
 			 arithmetic();
 		 }
 		 else{
 			 throw new ParserException("ID, integer, or arithmetic operator expected and "
-			          + lookahead.sequence + " found instead");
+			          + lookahead.getLexeme() + " found instead");
 		 }
 	  }
 	 
 	 private void statement()
 	 {
-		 if (lookahead.token == Token.ID){
+		 if (lookahead.getTokenType() == TokenType.ID){
 			 assign();
 		 }
-		 else if (lookahead.token == Token.WHILE){
+		 else if (lookahead.getTokenType() == TokenType.WHILE){
 			 whileLoop();
 		 }
-		 else if (lookahead.token == Token.IF){
+		 else if (lookahead.getTokenType() == TokenType.IF){
 			 ifLoop();
 		 }
-		 else if (lookahead.token == Token.REPEAT){
+		 else if (lookahead.getTokenType() == TokenType.REPEAT){
 			 repeat();
 		 }
-		 else if (lookahead.token == Token.PRINT){
+		 /*else if (lookahead.token == TokenType.PRINT){
 			 print();
-		 }
+		 }*/
 	 }
 	 
 }
