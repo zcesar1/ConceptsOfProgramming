@@ -1,8 +1,10 @@
-import scanner.Tokenizer;
+import Scanner;
+import TokenType;
+import Parser;
 
 public class ArithmeticExpression {
     
-    private int token_code = Tokenizer.LITERAL_INTEGER_N;
+    private int token_code = TokenType.LITERAL_INTEGER;
     private String sequence = "0";
     private ArithmeticExpression left = null;
     private ArithmeticExpression right = null;
@@ -51,22 +53,22 @@ public class ArithmeticExpression {
     public static int eval(ArithmeticExpression ae){
         int value = 0;
         switch (ae.getTokenCode()) {
-            case Tokenizer.IDENTIFIER_N:
+            case TokenType.ID:
                 value = Integer.parseInt(ae.getSequence());
                 break;
-            case Tokenizer.LITERAL_INTEGER_N:
+            case TokenType.LITERAL_INTEGER:
                 value = Integer.parseInt(ae.getSequence());
                 break;
-            case Tokenizer.ADD_OPERATOR_N:
+            case TokenType.ADD_OPERATOR:
                 value = eval(ae.getLeftNode()) + eval (ae.getRightNode());
                 break;
-            case Tokenizer.SUB_OPERATOR_N:
+            case TokenType.SUB_OPERATOR:
                 value = eval(ae.getLeftNode()) - eval(ae.getRightNode());
                 break;
-            case Tokenizer.MUL_OPERATOR_N:
+            case TokenType.MUL_OPERATOR:
                 value = eval(ae.getLeftNode()) * eval(ae.getRightNode());
                 break;
-            case Tokenizer.DIV_OPERATOR_N:
+            case TokenType.DIV_OPERATOR:
                 value = eval(ae.getLeftNode()) / eval(ae.getRightNode());
                 break;
             default:
@@ -110,23 +112,20 @@ public class BooleanExpression {
         boolean result = false;
         
         switch (this.getOperator()) {
-            case Tokenizer.EQ_OPERATOR_N:
+            case TokenType.EQ_OPERATOR:
                 result = left_value == right_value;
                 break;
-            case Tokenizer.GE_OPERATOR_N:
+            case TokenType.LE_OPERATOR:
                 result = left_value <= right_value;
                 break;
-            case Tokenizer.GT_OPERATOR_N:
+            case TokenType.LT_OPERATOR:
                 result = left_value < right_value;
                 break;
-            case Tokenizer.LE_OPERATOR_N:
+            case TokenType.GE_OPERATOR:
                 result = left_value >= right_value;
                 break;
-            case Tokenizer.LT_OPERATOR_N:
+            case TokenType.GT_OPERATOR:
                 result = left_value > right_value;
-                break;
-            case Tokenizer.NE_OPERATOR_N:
-                result = left_value == right_value; //We have integers and it is the only valid representations
                 break;
             default:
                 break;
